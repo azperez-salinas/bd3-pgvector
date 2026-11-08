@@ -6,6 +6,7 @@
 - Docker Compose
 
 ## Run the app
+
 From the project root:
 
 ```bash
