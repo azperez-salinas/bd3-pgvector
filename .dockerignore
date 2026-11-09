@@ -1,0 +1,9 @@
+.git
+.venv
+.env
+**/node_modules
+backend
+database
+embedder
+frontend
+data/embed.log

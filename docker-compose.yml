@@ -21,6 +21,8 @@ services:
     build:
       context: ./embedder
     container_name: pgvector_movie_embedder
+    environment:
+      HF_TOKEN: ${HF_TOKEN:-}
     ports:
       - "8000:8000"
     volumes:
@@ -31,6 +33,22 @@ services:
       timeout: 5s
       retries: 30
       start_period: 60s
+
+  loader:
+    build:
+      context: .
+      dockerfile: scripts/Dockerfile.loader
+    container_name: pgvector_movie_loader
+    environment:
+      PGHOST: db
+      PGPORT: 5432
+      PGDATABASE: app_db
+      PGUSER: app_user
+      PGPASSWORD: app_password
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: "no"
 
   backend:
     build:
@@ -44,12 +62,26 @@ services:
       PGDATABASE: app_db
       PGUSER: app_user
       PGPASSWORD: app_password
-      CORS_ORIGIN: http://localhost:5173
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:5173}
+      EMBEDDER_TIMEOUT_MS: ${EMBEDDER_TIMEOUT_MS:-30000}
+      PG_CONNECTION_TIMEOUT_MS: ${PG_CONNECTION_TIMEOUT_MS:-5000}
+      PGPOOL_MAX: ${PGPOOL_MAX:-10}
+      HF_TOKEN: ${HF_TOKEN:-}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-3.8-flash}
+      GEMINI_TIMEOUT_MS: ${GEMINI_TIMEOUT_MS:-60000}
+      GEMINI_TEMPERATURE: ${GEMINI_TEMPERATURE:-0.2}
+      RAG_TOP_K: ${RAG_TOP_K:-5}
+      RAG_MAX_TOP_K: ${RAG_MAX_TOP_K:-20}
     ports:
       - "3001:3001"
     depends_on:
       db:
         condition: service_healthy
+      embedder:
+        condition: service_healthy
+      loader:
+        condition: service_completed_successfully
 
   frontend:
     build:
