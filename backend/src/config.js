@@ -29,7 +29,7 @@ const config = {
   gemini: {
     apiUrlBase: "https://generativelanguage.googleapis.com/v1beta/models",
     apiKey: process.env.GEMINI_API_KEY || "",
-    model: process.env.GEMINI_MODEL || "gemini-3.8-flash",
+    model: process.env.GEMINI_MODEL || "gemini-3.5-flash",
     timeoutMs: positiveInteger("GEMINI_TIMEOUT_MS", 60000),
     temperature: Number(process.env.GEMINI_TEMPERATURE || 0.2),
   },

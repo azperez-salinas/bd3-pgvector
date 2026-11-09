@@ -25,7 +25,7 @@ Copy-Item .env.example .env
 Variables necesarias:
 
 - `GEMINI_API_KEY`: clave creada en Google AI Studio, obligatoria para el chat.
-- `GEMINI_MODEL`: modelo generativo; por defecto `gemini-3.8-flash`.
+- `GEMINI_MODEL`: modelo generativo; por defecto `gemini-3.5-flash`.
 - `HF_TOKEN`: opcional, autentica la descarga del modelo local de embeddings desde Hugging Face Hub.
 
 ## Ejecución
