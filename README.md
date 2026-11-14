@@ -105,6 +105,43 @@ GET /api/movies/filters
 
 Devuelve todos los géneros presentes y el año mínimo y máximo del dataset.
 
+## Frontend
+
+La interfaz (`frontend/src`) tiene dos pestañas:
+
+- **Chat**: conversación con historial (se guarda en el navegador y se reinicia con
+  "Nueva conversación"), indicador de carga mientras el backend consulta pgvector y Gemini,
+  respuesta con formato y tarjetas de las películas recuperadas con su similitud. Cada
+  tarjeta abre el detalle de la película. Los errores del backend se muestran en español
+  con la opción de reintentar.
+- **Explorar**: listado de todas las películas con búsqueda, filtros, ordenamiento y
+  paginación, en vista de grilla o de tabla, con detalle al hacer clic.
+
+En el encabezado se muestra el estado de `GET /api/health` (versión de pgvector y cantidad
+de películas con embedding).
+
+Estructura:
+
+- `api.js`: llamadas al backend y mensajes de error.
+- `views/ChatView.jsx` y `views/ExploreView.jsx`: las dos pestañas.
+- `components/`: tarjeta, detalle de película y renderizado del Markdown de Gemini.
+
+## Pruebas end-to-end
+
+La carpeta `e2e` tiene pruebas con Playwright que recorren todo el sistema: API, pestaña de
+exploración y chat (frontend, backend, embedder, pgvector y Gemini). Con el stack levantado
+(`docker compose up --build`) y la `GEMINI_API_KEY` configurada:
+
+```bash
+cd e2e
+npm install
+npx playwright install chromium
+npm test
+```
+
+El reporte queda en `e2e/playwright-report` (`npm run report` para abrirlo). Las URLs se
+pueden cambiar con `E2E_BASE_URL` (frontend) y `E2E_API_URL` (backend).
+
 ## Scripts manuales
 
 Para ejecutar el pipeline fuera de Docker, copiar `scripts/.env.example` a

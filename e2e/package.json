@@ -1,0 +1,14 @@
+{
+  "name": "prompt2movie-e2e",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Pruebas end-to-end de Prompt2Movie contra el stack levantado con docker compose.",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0"
+  }
+}
